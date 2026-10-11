@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ParentTeacher Connect | School Collaboration Hub</title>
+  
+  <!-- Font Awesome & Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Ambient Gradient Glow Elements -->
+  <div class="ambient-glow glow-pink-top"></div>
+  <div class="ambient-glow glow-purple-bottom"></div>
+
+  <!-- Toast Notification Stack -->
+  <div id="toastContainer" class="toast-shelf"></div>
+
+  <!-- Main App Shell -->
+  <div class="app-shell">
+    
+    <!-- Top Bar Navigation (Matches Screenshot Exactly) -->
+    <header class="app-header">
+      <div class="top-row">
+        <!-- Logo & Title -->
+        <div class="brand-group">
+          <div class="brand-badge-icon">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <div class="brand-meta">
+            <div class="brand-title">ParentTeacher <span class="highlight">Connect</span></div>
+            <div class="brand-tagline">SCHOOL COLLABORATION HUB</div>
+          </div>
+        </div>
+
+        <!-- Utility Controls -->
+        <div class="header-actions">
+          <div class="notification-trigger" onclick="switchSection('messages')" title="Unread Messages">
+            <i class="fa-regular fa-bell"></i>
+            <span class="notification-bubble" id="unreadPill">3</span>
+          </div>
+
+          <!-- Role Switcher -->
+          <div class="role-selector-pill">
+            <i class="fa-solid fa-user-gear text-pink"></i>
+            <select id="roleSelector" onchange="changeActiveRole(this.value)">
+              <option value="parent" selected>Parent: Mrs. Priya</option>
+              <option value="teacher">Teacher: Mr. Suresh</option>
+              <option value="admin">Administrator</option>
+            </select>
+          </div>
+
+          <!-- Avatar Chip -->
+          <div class="user-chip" id="userAvatarChip" title="Profile Details">
+            <span>PS</span>
+          </div>
+
+          <!-- Mobile Hamburger -->
+          <button class="menu-toggle-btn" id="mobileMenuBtn">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Horizontal Pill Nav Bar -->
+      <nav class="pill-nav-bar" id="pillNav">
+        <a href="#dashboard" class="pill-nav-item active" onclick="navigateTab(event, 'dashboard')">
+          <i class="fa-solid fa-compass"></i> <span>Dashboard</span>
+        </a>
+        <a href="#parents" class="pill-nav-item" onclick="navigateTab(event, 'parents')">
+          <i class="fa-solid fa-users"></i> <span>Parents</span>
+        </a>
+        <a href="#teachers" class="pill-nav-item" onclick="navigateTab(event, 'teachers')">
+          <i class="fa-solid fa-chalkboard-user"></i> <span>Teachers</span>
+        </a>
+        <a href="#students" class="pill-nav-item" onclick="navigateTab(event, 'students')">
+          <i class="fa-solid fa-user-graduate"></i> <span>Student Profile</span>
+        </a>
+        <a href="#messages" class="pill-nav-item" onclick="navigateTab(event, 'messages')">
+          <i class="fa-regular fa-comment-dots"></i> <span>Messaging</span>
+        </a>
+        <a href="#academic" class="pill-nav-item" onclick="navigateTab(event, 'academic')">
+          <i class="fa-solid fa-award"></i> <span>Academic</span>
+        </a>
+        <a href="#attendance" class="pill-nav-item" onclick="navigateTab(event, 'attendance')">
+          <i class="fa-solid fa-calendar-check"></i> <span>Attendance</span>
+        </a>
+        <a href="#fees" class="pill-nav-item" onclick="navigateTab(event, 'fees')">
+          <i class="fa-solid fa-wallet"></i> <span>Fees</span>
+        </a>
+        <a href="#meetings" class="pill-nav-item" onclick="navigateTab(event, 'meetings')">
+          <i class="fa-regular fa-calendar-plus"></i> <span>PTM Scheduler</span>
+        </a>
+        <a href="#reports" class="pill-nav-item" onclick="navigateTab(event, 'reports')">
+          <i class="fa-solid fa-file-export"></i> <span>Reports</span>
+        </a>
+      </nav>
+    </header>
+
+    <!-- Main Content Body -->
+    <main class="app-content">
+
+      <!-- 1. DASHBOARD -->
+      <section id="dashboard" class="view-panel active">
+        <!-- Hero Banner matching user's design -->
+        <div class="hero-glass-card">
+          <div class="session-badge">
+            <span class="pulsing-dot"></span> Academic Session 2026–27 Active
+          </div>
+          <h1 class="hero-title">Welcome back, <span id="welcomeUserName">Mrs. Priya Sharma</span>!</h1>
+          <p class="hero-description">
+            Track your child's learning journey, review exam grades, and coordinate with teachers seamlessly.
+          </p>
+          <div class="hero-buttons">
+            <button class="btn btn-pill-primary" onclick="openModal('quickMsgModal')">
+              <i class="fa-solid fa-paper-plane"></i> Quick Message
+            </button>
+            <button class="btn btn-pill-outline" onclick="openModal('ptmSlotModal')">
+              <i class="fa-regular fa-calendar-plus"></i> Book PTM Slot
+            </button>
+          </div>
+        </div>
+
+        <!-- Metric Stat Cards -->
+        <div class="stats-row">
+          <div class="dark-stat-card">
+            <div class="stat-top">
+              <span class="stat-title">Child Enrollment</span>
+              <div class="stat-glow-icon pink"><i class="fa-solid fa-children"></i></div>
+            </div>
+            <div class="stat-val" id="statChildCount">2</div>
+            <div class="stat-meta text-emerald"><i class="fa-solid fa-circle-check"></i> Rahul & Riya (Active)</div>
+          </div>
+
+          <div class="dark-stat-card">
+            <div class="stat-top">
+              <span class="stat-title">Cumulative Attendance</span>
+              <div class="stat-glow-icon purple"><i class="fa-solid fa-user-check"></i></div>
+            </div>
+            <div class="stat-val">97.2%</div>
+            <div class="stat-meta text-emerald"><i class="fa-solid fa-arrow-trend-up"></i> Top 5% percentile</div>
+          </div>
+
+          <div class="dark-stat-card">
+            <div class="stat-top">
+              <span class="stat-title">Pending Invoices</span>
+              <div class="stat-glow-icon orange"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+            </div>
+            <div class="stat-val" id="statPendingFees">$0.00</div>
+            <div class="stat-meta text-muted"><i class="fa-solid fa-clock"></i> Term 2 Cleared</div>
+          </div>
+
+          <div class="dark-stat-card">
+            <div class="stat-top">
+              <span class="stat-title">Upcoming PTM</span>
+              <div class="stat-glow-icon rose"><i class="fa-regular fa-calendar-check"></i></div>
+            </div>
+            <div class="stat-val" id="statMeetingCount">1</div>
+            <div class="stat-meta text-pink"><i class="fa-solid fa-video"></i> Oct 14 • 11:30 AM</div>
+          </div>
+        </div>
+
+        <!-- Dual Column Live Feeds -->
+        <div class="feed-grid">
+          <!-- Recent Notices -->
+          <div class="content-box">
+            <div class="box-head">
+              <h3><i class="fa-solid fa-bullhorn text-pink"></i> Campus Bulletins & Alerts</h3>
+              <button class="btn btn-tiny btn-pill-outline" onclick="openModal('postNoticeModal')">+ Add Bulletin</button>
+            </div>
+            <div class="notices-list" id="dashboardNoticesList">
+              <!-- Injected via script -->
+            </div>
+          </div>
+
+          <!-- Today's Schedule -->
+          <div class="content-box">
+            <div class="box-head">
+              <h3><i class="fa-regular fa-calendar-days text-pink"></i> Scheduled Conferences</h3>
+              <button class="btn btn-tiny btn-pill-primary" onclick="openModal('ptmSlotModal')">Book New</button>
+            </div>
+            <div class="schedule-list" id="dashboardScheduleList">
+              <!-- Injected via script -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. PARENTS DIRECTORY -->
+      <section id="parents" class="view-panel">
+        <div class="panel-header-row">
+          <div>
+            <h2>Parent Directory & Roster</h2>
+            <p class="subtext">Verified parent contacts and enrolled student relations.</p>
+          </div>
+          <button class="btn btn-pill-primary" onclick="openModal('addParentModal')">
+            <i class="fa-solid fa-user-plus"></i> Register Parent
+          </button>
+        </div>
+
+        <div class="content-box">
+          <div class="search-input-wrap">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="parentSearchInput" placeholder="Filter by parent name, child or phone..." onkeyup="filterParents()" />
+          </div>
+          <div class="table-scroller">
+            <table class="dark-table">
+              <thead>
+                <tr>
+                  <th>Parent Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Registered Children</th>
+                  <th>Address</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="parentsTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. TEACHERS DIRECTORY -->
+      <section id="teachers" class="view-panel">
+        <div class="panel-header-row">
+          <div>
+            <h2>Faculty & Mentors</h2>
+            <p class="subtext">Certified faculty departments, teaching classes, and slot availability.</p>
+          </div>
+          <button class="btn btn-pill-primary" onclick="openModal('addTeacherModal')">
+            <i class="fa-solid fa-chalkboard-user"></i> Register Faculty
+          </button>
+        </div>
+
+        <div class="content-box">
+          <div class="table-scroller">
+            <table class="dark-table">
+              <thead>
+                <tr>
+                  <th>Teacher Name</th>
+                  <th>Subject</th>
+                  <th>Class Assigned</th>
+                  <th>Email</th>
+                  <th>Consultation Hours</th>
+                  <th>Direct Contact</th>
+                </tr>
+              </thead>
+              <tbody id="teachersTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. STUDENT PROFILE -->
+      <section id="students" class="view-panel">
+        <div class="panel-header-row">
+          <div>
+            <h2>Student 360° Profile</h2>
+            <p class="subtext">Academic standing, behavioral observations, and personal bio.</p>
+          </div>
+          <div class="action-flex">
+            <select id="studentPicker" class="dark-select" onchange="renderStudentProfile(this.value)"></select>
+          </div>
+        </div>
+
+        <div class="profile-layout" id="profileContentArea">
+          <!-- Injected via JS -->
+        </div>
+      </section>
+
+      <!-- 5. MESSAGING SYSTEM -->
+      <section id="messages" class="view-panel">
+        <div class="panel-header-row">
+          <div>
+            <h2>School Communication Channel</h2>
+            <p class="subtext">Instant messaging between verified parents and teachers.</p>
+          </div>
+          <button class="btn btn-pill-primary" onclick="openModal('quickMsgModal')">
+            <i class="fa-solid fa-paper-plane"></i> New Message
+          </button>
+        </div>
+
+        <div class="messaging-container">
+          <div class="threads-pane">
+            <div class="thread-tabs">
+              <button class="thread-tab-btn active" onclick="switchFolder('inbox', this)">Inbox</button>
+              <button class="thread-tab-btn" onclick="switchFolder('sent', this)">Sent</button>
+            </div>
+            <div class="thread-list" id="threadList">
+              <!-- Injected by script -->
+            </div>
+          </div>
+          <div class="conversation-pane" id="activeChatPane">
+            <div class="no-selection-msg">
+              <i class="fa-regular fa-comment-dots"></i>
+              <p>Select a message thread from the left pane.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. ACADEMIC PROGRESS -->
+      <section id="academic" class="view-panel">
+        <div class="panel-header-row">
+          <div>
+            <h2>Academic Marks & Exam Evaluations</h2>
+            <p class="subtext">Subject-wise marks breakdown and grading curve.</p>
+          </div>
+          <button class="btn btn-pill-primary" onclick="openModal('addScoreModal')">
+            <i class="fa-solid fa-plus"></i> Record Exam Marks
+          </button>
+        </div>
+
+        <div class="content-box">
+          <div class="table-scroller">
+            <table class="dark-table">
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Subject</th>
+                  <th>Score (100)</th>
+                  <th>Grade</th>
+                  <th>Instructor Feedback</th>
+                </tr>
+              </thead>
+              <tbody id="academicTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. ATTENDANCE TRACKING -->
+      <section id="attendance" class="view-panel">
+        <div class="panel-header-row">
+          <div>
+            <h2>Daily Class Attendance Roster</h2>
+            <p class="subtext">Roll call records and real-time absence tracking.</p>
+          </div>
+          <div class="action-flex">
+            <input type="date" id="attendanceFilterDate" class="dark-date-input" onchange="renderAttendance()" />
+            <button class="btn btn-pill-primary" onclick="showNotification('Attendance records committed to session database.')">
+              <i class="fa-solid fa-check-double"></i> Save Roll Call
+            </button>
+          </div>
+        </div>
+
+        <div class="content-box">
+          <div class="table-scroller">
+            <table class="dark-table">
+              <thead>
+                <tr>
+                  <th>Roll Code</th>
+                  <th>Student</th>
+                  <th>Grade</th>
+                  <th>Date</th>
+                  <th>Current Status</th>
+                  <th>Mark Status</th>
+                </tr>
+              </thead>
+              <tbody id="attendanceTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. FEES MANAGEMENT -->
+      <section id="fees" class="view-panel">
+        <div class="panel-header-row">
+          <div>
+            <h2>Fee Ledger & Digital Vouchers</h2>
+            <p class="subtext">Tuition schedules, term dues, and instant digital payments.</p>
+          </div>
+          <button class="btn btn-pill-primary" onclick="openModal('addFeeModal')">
+            <i class="fa-solid fa-receipt"></i> Generate New Invoice
+          </button>
+        </div>
+
+        <div class="content-box">
+          <div class="table-scroller">
+            <table class="dark-table">
+              <thead>
+                <tr>
+                  <th>Invoice Ref</th>
+                  <th>Student</th>
+                  <th>Fee Description</th>
+                  <th>Amount</th>
+                  <th>Due Date</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="feesTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. PTM SCHEDULER -->
+      <section id="meetings" class="view-panel">
+        <div class="panel-header-row">
+          <div>
+            <h2>Parent-Teacher Consultation Schedule</h2>
+            <p class="subtext">Coordinate 1-on-1 virtual or in-person review slots.</p>
+          </div>
+          <button class="btn btn-pill-primary" onclick="openModal('ptmSlotModal')">
+            <i class="fa-regular fa-calendar-plus"></i> Request Consultation
+          </button>
+        </div>
+
+        <div class="ptm-cards-grid" id="ptmSlotsGrid">
+          <!-- Injected via script -->
+        </div>
+      </section>
+
+      <!-- 10. REPORTS & EXPORTS -->
+      <section id="reports" class="view-panel">
+        <div class="panel-header-row">
+          <div>
+            <h2>Report Center & Data Export</h2>
+            <p class="subtext">Export clean CSV datasheets or trigger student grade print dossiers.</p>
+          </div>
+        </div>
+
+        <div class="reports-grid">
+          <div class="dark-stat-card">
+            <div class="stat-top">
+              <span class="stat-title">Student Academic Dossier</span>
+              <div class="stat-glow-icon pink"><i class="fa-solid fa-file-csv"></i></div>
+            </div>
+            <p class="card-caption">All subject scores, teacher feedback comments, and letter grades.</p>
+            <button class="btn btn-pill-primary btn-full mt-3" onclick="exportAcademicCSV()">
+              <i class="fa-solid fa-download"></i> Download Academic CSV
+            </button>
+          </div>
+
+          <div class="dark-stat-card">
+            <div class="stat-top">
+              <span class="stat-title">Attendance Master Registry</span>
+              <div class="stat-glow-icon purple"><i class="fa-solid fa-table-list"></i></div>
+            </div>
+            <p class="card-caption">Historical daily check-in roll call and cumulative attendance averages.</p>
+            <button class="btn btn-pill-primary btn-full mt-3" onclick="exportAttendanceCSV()">
+              <i class="fa-solid fa-download"></i> Download Attendance CSV
+            </button>
+          </div>
+
+          <div class="dark-stat-card">
+            <div class="stat-top">
+              <span class="stat-title">Print Student Progress Report</span>
+              <div class="stat-glow-icon orange"><i class="fa-solid fa-print"></i></div>
+            </div>
+            <p class="card-caption">Generates a clean, browser-printable performance summary.</p>
+            <button class="btn btn-pill-outline btn-full mt-3" onclick="window.print()">
+              <i class="fa-solid fa-print"></i> Print Report Card
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ======================== MODALS ======================== -->
+
+  <!-- Quick Message Modal -->
+  <div class="modal-backdrop" id="quickMsgModal">
+    <div class="dark-modal-box">
+      <div class="modal-head">
+        <h3><i class="fa-solid fa-paper-plane text-pink"></i> Send Message</h3>
+        <span class="close-x" onclick="closeModal('quickMsgModal')">&times;</span>
+      </div>
+      <form onsubmit="handleSendMessage(event)">
+        <div class="form-item">
+          <label>Recipient Faculty / Parent</label>
+          <select id="msgRecipientSelect" class="dark-select" required></select>
+        </div>
+        <div class="form-item">
+          <label>Subject</label>
+          <input type="text" id="msgSubjectInput" class="dark-input" placeholder="e.g. Science Fair Presentation Slot" required />
+        </div>
+        <div class="form-item">
+          <label>Message Content</label>
+          <textarea id="msgBodyInput" class="dark-textarea" rows="4" placeholder="Type your polite inquiry..." required></textarea>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="btn btn-pill-outline" onclick="closeModal('quickMsgModal')">Cancel</button>
+          <button type="submit" class="btn btn-pill-primary">Send Message</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- PTM Slot Modal -->
+  <div class="modal-backdrop" id="ptmSlotModal">
+    <div class="dark-modal-box">
+      <div class="modal-head">
+        <h3><i class="fa-regular fa-calendar-plus text-pink"></i> Book PTM Consultation</h3>
+        <span class="close-x" onclick="closeModal('ptmSlotModal')">&times;</span>
+      </div>
+      <form onsubmit="handleBookPTM(event)">
+        <div class="form-item">
+          <label>Teacher</label>
+          <select id="ptmTeacherSelect" class="dark-select" required></select>
+        </div>
+        <div class="form-row">
+          <div class="form-item">
+            <label>Date</label>
+            <input type="date" id="ptmDateInput" class="dark-input" required />
+          </div>
+          <div class="form-item">
+            <label>Time Slot</label>
+            <input type="time" id="ptmTimeInput" class="dark-input" required />
+          </div>
+        </div>
+        <div class="form-item">
+          <label>Discussion Agenda</label>
+          <input type="text" id="ptmAgendaInput" class="dark-input" placeholder="e.g. Math homework progress & midterms" required />
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="btn btn-pill-outline" onclick="closeModal('ptmSlotModal')">Cancel</button>
+          <button type="submit" class="btn btn-pill-primary">Confirm Slot</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Parent Modal -->
+  <div class="modal-backdrop" id="addParentModal">
+    <div class="dark-modal-box">
+      <div class="modal-head">
+        <h3><i class="fa-solid fa-user-plus text-pink"></i> Register New Parent</h3>
+        <span class="close-x" onclick="closeModal('addParentModal')">&times;</span>
+      </div>
+      <form onsubmit="handleAddParent(event)">
+        <div class="form-item">
+          <label>Full Name</label>
+          <input type="text" id="newParentName" class="dark-input" placeholder="e.g. Mrs. Anita Desai" required />
+        </div>
+        <div class="form-row">
+          <div class="form-item">
+            <label>Email Address</label>
+            <input type="email" id="newParentEmail" class="dark-input" placeholder="anita@email.com" required />
+          </div>
+          <div class="form-item">
+            <label>Phone Number</label>
+            <input type="tel" id="newParentPhone" class="dark-input" placeholder="+91 9876543299" required />
+          </div>
+        </div>
+        <div class="form-item">
+          <label>Enrolled Children (Comma separated)</label>
+          <input type="text" id="newParentChildren" class="dark-input" placeholder="Ananya Desai" required />
+        </div>
+        <div class="form-item">
+          <label>Address</label>
+          <input type="text" id="newParentAddress" class="dark-input" placeholder="789, Bengaluru" required />
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="btn btn-pill-outline" onclick="closeModal('addParentModal')">Cancel</button>
+          <button type="submit" class="btn btn-pill-primary">Save Parent Record</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Teacher Modal -->
+  <div class="modal-backdrop" id="addTeacherModal">
+    <div class="dark-modal-box">
+      <div class="modal-head">
+        <h3><i class="fa-solid fa-chalkboard-user text-pink"></i> Register Faculty Member</h3>
+        <span class="close-x" onclick="closeModal('addTeacherModal')">&times;</span>
+      </div>
+      <form onsubmit="handleAddTeacher(event)">
+        <div class="form-item">
+          <label>Faculty Full Name</label>
+          <input type="text" id="newTeacherName" class="dark-input" placeholder="e.g. Dr. Vikram Bose" required />
+        </div>
+        <div class="form-row">
+          <div class="form-item">
+            <label>Subject Discipline</label>
+            <input type="text" id="newTeacherSubject" class="dark-input" placeholder="Physics" required />
+          </div>
+          <div class="form-item">
+            <label>Class Assigned</label>
+            <input type="text" id="newTeacherClass" class="dark-input" placeholder="Grade 8-A" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-item">
+            <label>Email</label>
+            <input type="email" id="newTeacherEmail" class="dark-input" placeholder="vikram.bose@school.edu" required />
+          </div>
+          <div class="form-item">
+            <label>Consultation Hours</label>
+            <input type="text" id="newTeacherAvail" class="dark-input" placeholder="Tue-Sat 8AM-1PM" required />
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="btn btn-pill-outline" onclick="closeModal('addTeacherModal')">Cancel</button>
+          <button type="submit" class="btn btn-pill-primary">Induct Faculty</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Grade Modal -->
+  <div class="modal-backdrop" id="addScoreModal">
+    <div class="dark-modal-box">
+      <div class="modal-head">
+        <h3><i class="fa-solid fa-award text-pink"></i> Record Academic Score</h3>
+        <span class="close-x" onclick="closeModal('addScoreModal')">&times;</span>
+      </div>
+      <form onsubmit="handleAddGrade(event)">
+        <div class="form-item">
+          <label>Student</label>
+          <select id="scoreStudentSelect" class="dark-select" required></select>
+        </div>
+        <div class="form-row">
+          <div class="form-item">
+            <label>Subject</label>
+            <select id="scoreSubjectSelect" class="dark-select" required>
+              <option value="Mathematics">Mathematics</option>
+              <option value="English Literature">English Literature</option>
+              <option value="Physics">Physics</option>
+              <option value="Social Sciences">Social Sciences</option>
+            </select>
+          </div>
+          <div class="form-item">
+            <label>Score (0-100)</label>
+            <input type="number" id="scoreMarksInput" min="0" max="100" class="dark-input" placeholder="95" required />
+          </div>
+        </div>
+        <div class="form-item">
+          <label>Instructor Observation Feedback</label>
+          <input type="text" id="scoreCommentsInput" class="dark-input" placeholder="Exceptional problem-solving approach." required />
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="btn btn-pill-outline" onclick="closeModal('addScoreModal')">Cancel</button>
+          <button type="submit" class="btn btn-pill-primary">Save Score</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Fee Modal -->
+  <div class="modal-backdrop" id="addFeeModal">
+    <div class="dark-modal-box">
+      <div class="modal-head">
+        <h3><i class="fa-solid fa-receipt text-pink"></i> Issue Fee Invoice</h3>
+        <span class="close-x" onclick="closeModal('addFeeModal')">&times;</span>
+      </div>
+      <form onsubmit="handleAddFee(event)">
+        <div class="form-item">
+          <label>Student</label>
+          <select id="feeStudentSelect" class="dark-select" required></select>
+        </div>
+        <div class="form-item">
+          <label>Fee Category</label>
+          <input type="text" id="feeDescInput" class="dark-input" placeholder="Term 3 Science & Lab Materials" required />
+        </div>
+        <div class="form-row">
+          <div class="form-item">
+            <label>Amount ($)</label>
+            <input type="number" id="feeAmountInput" min="10" class="dark-input" placeholder="250" required />
+          </div>
+          <div class="form-item">
+            <label>Due Date</label>
+            <input type="date" id="feeDueInput" class="dark-input" required />
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="btn btn-pill-outline" onclick="closeModal('addFeeModal')">Cancel</button>
+          <button type="submit" class="btn btn-pill-primary">Create Invoice</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Post Notice Modal -->
+  <div class="modal-backdrop" id="postNoticeModal">
+    <div class="dark-modal-box">
+      <div class="modal-head">
+        <h3><i class="fa-solid fa-bullhorn text-pink"></i> Publish Campus Notice</h3>
+        <span class="close-x" onclick="closeModal('postNoticeModal')">&times;</span>
+      </div>
+      <form onsubmit="handlePostNotice(event)">
+        <div class="form-item">
+          <label>Notice Headline</label>
+          <input type="text" id="noticeTitleInput" class="dark-input" placeholder="Annual Sports Day Schedule" required />
+        </div>
+        <div class="form-item">
+          <label>Description & Dates</label>
+          <textarea id="noticeDescInput" class="dark-textarea" rows="3" placeholder="Provide event instructions..." required></textarea>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="btn btn-pill-outline" onclick="closeModal('postNoticeModal')">Cancel</button>
+          <button type="submit" class="btn btn-pill-primary">Publish</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
